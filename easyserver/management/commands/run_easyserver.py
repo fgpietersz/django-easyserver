@@ -8,10 +8,6 @@ from django.core.wsgi import get_wsgi_application
 from django.conf import settings
 
 
-# directory as a Path object
-static_root = Path(settings.STATIC_ROOT)
-
-
 def get_static_app(root):
     """Return a WSGI app that serves static files from root"""
     root_obj = Path(root)
@@ -23,6 +19,7 @@ def get_static_app(root):
         # TODO deal with directories and 404
         with open(full_path, 'rb') as f:
             content = f.read()
+        except (
         # TODO need to return content types
         start_response('200 OK', [])
         return [content]
