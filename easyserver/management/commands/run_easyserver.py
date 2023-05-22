@@ -12,14 +12,15 @@ def get_static_app(root):
     """Return a WSGI app that serves static files from root"""
     root_obj = Path(root)
 
-    def serve_static(environ, start_response):
+    def serve_static(fpath, start_response):
         # FIXME - this is insecure and requires path check to prevent ../ etc
-        print(environ['PATH_INFO'])
-        full_path = root_obj / environ['PATH_INFO'].lstrip('/')
-        # TODO deal with directories and 404
-        with open(full_path, 'rb') as f:
-            content = f.read()
-        except (
+        full_path = root_obj / fpath
+        try:
+            with open(full_path, 'rb') as f:
+                content = f.read()
+        except (IsADirectoryError, FileNotFoundError):
+            start_response('404 Not Found', [])
+            return [b'<h1>Not found</h1>']
         # TODO need to return content types
         start_response('200 OK', [])
         return [content]
