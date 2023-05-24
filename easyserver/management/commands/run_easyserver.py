@@ -9,9 +9,6 @@ from django.core.wsgi import get_wsgi_application
 from django.conf import settings
 
 
-
-
-
 def get_static_app(root):
     """Return a WSGI app that serves static files from root"""
     root_obj = Path(root)
