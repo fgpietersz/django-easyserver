@@ -30,12 +30,14 @@ def get_static_app(root):
 
 def get_dispatcher():
     # paths can only be top level dir
+    # replace assertions with checks. Ensure directory exists
     static_path = settings.STATIC_URL.strip('/').split('/')
     assert len(static_path) == 1
     media_path = settings.MEDIA_URL.strip('/').split('/')
     assert len(media_path) == 1
     path_map = {
         static_path[0]: get_static_app(settings.STATIC_ROOT),
+        # TODO deal correctly with MEDIA_ROOT not set.
         media_path[0]: get_static_app(settings.MEDIA_ROOT),
     }
     paths = {static_path[0], media_path[0]}
@@ -45,7 +47,7 @@ def get_dispatcher():
     app = get_wsgi_application()
 
     def dispatch(environ, start_response):
-        split_path = environ['PATH_INFO'].strip('/').split('/')
+        split_path = [p for p in environ['PATH_INFO'].split('/') if p]
         if not (split_path and (split_path[0] in paths)):
             return app(environ, start_response)
         assert len(split_path) >= 2
