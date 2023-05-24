@@ -9,6 +9,9 @@ from django.core.wsgi import get_wsgi_application
 from django.conf import settings
 
 
+
+
+
 def get_static_app(root):
     """Return a WSGI app that serves static files from root"""
     root_obj = Path(root)
@@ -59,9 +62,14 @@ class Command(BaseCommand):
     help = 'Run a production quality server'
 
     def handle(self, *args, **options):
+        cheroot_settings = getattr(settings, 'CHEROOT', {})
         server = Server(
-            ('127.0.0.1', 8080),
-            get_dispatcher()
-            # TODO Add other args
+            (
+                getattr(settings, 'EASYSERVER_IP', None) or '0.0.0.0',
+                getattr(settings, 'EASYSERVER_PORT', None) or 80
+            ),
+            get_dispatcher(),
+            **cheroot_settings
         )
+        print('starting:', server)
         server.start()
