@@ -16,9 +16,9 @@ The server is threaded Python so is probably not suitable where performance is a
 
 The following settings are all optional:
 
-EASYSERVER_IP - the ip address to bind. Defaults to 0.0.0.0  (all available IPs)
-EASYSERVER_PORT - port to bind. Defaults to 80. You will need to change this or configure the system for appropriate privileges on unix like OSes.
-CHEROOT - a dict of any keyword params accepted by Cheroot's [cheroot.wsgi.Server](https://cheroot.cherrypy.dev/en/latest/pkg/cheroot.wsgi/)
+* EASYSERVER_IP - the ip address to bind. Defaults to 0.0.0.0  (all available IPs)
+* EASYSERVER_PORT - port to bind. Defaults to 80. You will need to change this or configure the system for appropriate privileges on unix like OSes.
+* CHEROOT - a dict of any keyword params accepted by Cheroot's [cheroot.wsgi.Server](https://cheroot.cherrypy.dev/en/latest/pkg/cheroot.wsgi/). Defaults to {}.
 
 
 # TODO
