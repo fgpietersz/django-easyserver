@@ -28,5 +28,6 @@ These are the major features still missing:
 * https support
 * Acme support to get TLS certificates for https
 * Simplifying usage of ports 80 and 443
+* Tests
 
 The last of these is OS specific and is likely to be support only on Linux.
