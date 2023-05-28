@@ -20,7 +20,6 @@ cheroot_defaults = {
 
 class Server(HTTPServer):
     """Subclass specific to this command"""
-    #gateway = Gateway_10
 
     def __init__(self, addr, wsgi_app, **kwargs):
         super().__init__(
