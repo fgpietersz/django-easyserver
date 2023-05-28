@@ -4,7 +4,7 @@
 
 This provides a very simple way of deploying a Django project to production. There are other solutions for using CherryPy, but this further simplifies things by serving static and media files automatically provided you have the usual Django MEDIA\_\* and STATIC\_\* settings and generally setting sensible defaults for small sites.
 
-The motivation for creating this was the realisation of just how many Django sites were running on small VPSes, but using solutions that were suited to high traffic sites running on servers with large numbers of cores.
+The original idea for this came from using existing CherryPy server for Django snippets for low traffic sites and seeing ways to improve it. The motivation for creating a more elaborate solution came from the realisation the approach was also well suited to API backends even on larger sites.
 
 # Settings
 
@@ -40,10 +40,15 @@ The server is threaded Python so is probably not suitable where performance is a
 ## Advantages
 
 * Simplicity of deployment - no need to configure a separate web server
-* Django locmem cache *should* work well
+* Django locmem cache should work well
+* Performance should be good for most use cases
+* Lightweight and should be efficient/low resource usage
 
 ## Disadvantages
 
 * Will not scale well for some/many use cases
 * Not as well tested as more popular solutions
-* Static file serving will almost certainly be relatively inefficient
+* Static file serving and upload will almost certainly be relatively inefficient
+* CPU bound code will be limited by the Python GIL
+
+Obviously all these will vary with your use case. If it works well then it has the advantage of simplicity. If you are concerned about performance relative to alternatives, then the only way to know either way is to test.
