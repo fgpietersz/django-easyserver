@@ -18,7 +18,7 @@ The following settings are all optional:
 
 * EASYSERVER_IP - the ip address to bind. Defaults to 0.0.0.0  (all available IPs)
 * EASYSERVER_PORT - port to bind. Defaults to 80. You will need to change this or configure the system for appropriate privileges on unix like OSes.
-* CHEROOT - a dict of any keyword params accepted by Cheroot's [cheroot.wsgi.Server](https://cheroot.cherrypy.dev/en/latest/pkg/cheroot.wsgi/). Defaults to {}.
+* CHEROOT - a dict of any keyword params accepted by Cheroot's [cheroot.wsgi.Server](https://cheroot.cherrypy.dev/en/latest/pkg/cheroot.wsgi/). Defaults to {} but this is NOT the same as cheroot for all defaults.
 
 
 # TODO
@@ -28,6 +28,7 @@ These are the major features still missing:
 * https support
 * Acme support to get TLS certificates for https
 * Simplifying usage of ports 80 and 443
+* Logging
 * Tests
 
-The last of these is OS specific and is likely to be supported only on Linux.
+Dealing with ports is OS specific and is likely to be supported only on Linux. It is fairly simple to fix manually so is a low priority.

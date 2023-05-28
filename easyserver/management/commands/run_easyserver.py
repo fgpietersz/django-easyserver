@@ -1,12 +1,37 @@
 from pathlib import Path
 import re
 
-from cheroot.wsgi import Server
+from cheroot.wsgi import Gateway_10  # WSGI 1.0 subclass
+from cheroot.server import HTTPServer
 
 from django.core.management.base import BaseCommand
 from django.core.wsgi import get_wsgi_application
 
 from django.conf import settings
+
+
+# override default cheroot settings
+cheroot_defaults = {
+    #  TODO replace based on number of CPUs
+    'minthreads': 3,  # a good default for a small VPS
+    'gateway': Gateway_10
+}
+
+
+class Server(HTTPServer):
+    """Subclass specific to this command"""
+    #gateway = Gateway_10
+
+    def __init__(self, addr, wsgi_app, **kwargs):
+        super().__init__(
+            addr,
+            **{**cheroot_defaults, **kwargs}
+        )
+        self.wsgi_app = wsgi_app
+        self.max_request_body_size = kwargs.get(
+            'max_request_body_size',
+            settings.DATA_UPLOAD_MAX_MEMORY_SIZE + settings.FILE_UPLOAD_MAX_MEMORY_SIZE
+        )
 
 
 def get_static_app(root):
@@ -59,14 +84,12 @@ class Command(BaseCommand):
     help = 'Run a production quality server'
 
     def handle(self, *args, **options):
-        cheroot_settings = getattr(settings, 'CHEROOT', {})
         server = Server(
             (
                 getattr(settings, 'EASYSERVER_IP', None) or '0.0.0.0',
                 getattr(settings, 'EASYSERVER_PORT', None) or 80
             ),
-            get_dispatcher(),
-            **cheroot_settings
+            get_dispatcher()
         )
         print('starting:', server)
         server.start()
