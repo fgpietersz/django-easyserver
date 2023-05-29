@@ -27,9 +27,8 @@ easyserver_settings = {
     **getattr(settings, 'EASYSERVER', {}),
 }
 
-if not 'WELL_KOWN_ROOT' in easyserver_settings:
+if 'WELL_KOWN_ROOT' not in easyserver_settings:
     easyserver_settings['WELL_KOWN_ROOT'] = get_well_known_root()
-
 
 print(easyserver_settings)
 

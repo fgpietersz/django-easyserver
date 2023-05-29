@@ -14,7 +14,7 @@ All settings are optional:
     * IP - the IP address to bind. Defaults to 0.0.0.0  (all available IPs)
     * PORT - port to bind. Defaults to 80. You will need to change this or configure the system for appropriate privileges on unix like OSes.
     * SERVE_STATIC - whether to serve static and media files. Defaults to True.
-    * WELL_KOWN_ROOT - root for /.well-known path. To be used for ACME client. Defaults to settings.BASE_DIR/well_known_root
+    * WELL_KOWN_ROOT - root for /.well-known path. To be used for ACME client. Defaults to settings.BASE_DIR/well_known_root. Set to None to disable.
 * CHEROOT - a dict of any keyword params accepted by Cheroot's [cheroot.wsgi.Server](https://cheroot.cherrypy.dev/en/latest/pkg/cheroot.wsgi/). Defaults to {} but this is NOT the same as cheroot for all defaults.
 
 
