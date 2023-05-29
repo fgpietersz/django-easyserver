@@ -1,5 +1,4 @@
 from pathlib import Path
-import re
 
 from cheroot.wsgi import Gateway_10  # WSGI 1.0 subclass
 from cheroot.server import HTTPServer
@@ -10,18 +9,27 @@ from django.core.wsgi import get_wsgi_application
 from django.conf import settings
 
 
-# Get relevant settings
+def get_well_known_root():
+    """Create a root directory for .well-known if not specified"""
+    well_known = Path(settings.BASE_DIR) / 'well_known_root'
+    well_known.mkdir(exist_ok=True)
+    return well_known
 
+
+# Get relevant settings
 
 easyserver_settings = {
     **{
         'SERVE_STATIC': True,
         'IP': '0.0.0.0',
         'PORT': 80,
-        # TODO add setting for 
     },
     **getattr(settings, 'EASYSERVER', {}),
 }
+
+if not 'WELL_KOWN_ROOT' in easyserver_settings:
+    easyserver_settings['WELL_KOWN_ROOT'] = get_well_known_root()
+
 
 print(easyserver_settings)
 
@@ -83,9 +91,9 @@ def get_dispatcher():
         media_path[0]: get_static_app(settings.MEDIA_ROOT),
     }
     paths = {static_path[0], media_path[0]}
-    if hasattr(settings, 'WELL_KOWN_ROOT'):
+    if easyserver_settings['WELL_KOWN_ROOT']:
         paths.add('.well_known')
-        path_map['.well_known/'] = get_static_app(settings.WELL_KOWN_ROOT)
+        path_map['.well_known/'] = get_static_app(easyserver_settings['WELL_KOWN_ROOT'])
     app = get_wsgi_application()
 
     def dispatch(environ, start_response):
