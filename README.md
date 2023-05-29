@@ -52,3 +52,20 @@ The server is threaded Python so is probably not suitable where performance is a
 * CPU bound code will be limited by the Python GIL
 
 Obviously all these will vary with your use case. If it works well then it has the advantage of simplicity. If you are concerned about performance relative to alternatives, then the only way to know either way is to test.
+
+
+## Performance considerations
+
+Performance is likely to be the main objection to the use of Django Easyserver. While it does not follow the conventional wisdom (that multi-process is preferable to threading) with regard to Python performance and scaling, there are good arguments in its favour.
+
+The server used is Cheroot, the server from the (threaded) CherryPy framework. In most, if not all,  publicly available benchmarking CherryPy performs well. It is possible that threaded Django on Cheroot will perform worse than CherryPy on Cheroot, but there is no known reason to expect that.
+
+On a single (virtual) core VPS threading should perform better. It cannot have worse parallelism and it has slightly lower overhead.
+
+On a large multicore server multiple processes should perform better.
+
+At what point this happens will be application and configuration dependent. For example, many C libraries release the Python GIL and are thread safe so if these dominate CPU time multiple threads will make good use of multiple cores. On the other hand if you are doing a lot of heavy processing in pure Python and have sufficiently high traffic that you need this to be well parallelised (unless you have thousands of requests per hour you probably do not) then you need multiple processes.
+
+Commonly used thread safe libraries include RDBMS clients. Performance is likely to be improved by setting a sensible value for CONN_MAX_AGE.
+
+Because threads share memory, local memory caching should work well. This includes Django's built in locmem cache. Deployment just uses one extra setting.
