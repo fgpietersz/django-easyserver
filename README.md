@@ -8,11 +8,12 @@ The original idea for this came from using existing CherryPy server for Django s
 
 # Settings
 
-The following settings are all optional:
+All settings are optional:
 
-* EASYSERVER_IP - the IP address to bind. Defaults to 0.0.0.0  (all available IPs)
-* EASYSERVER_PORT - port to bind. Defaults to 80. You will need to change this or configure the system for appropriate privileges on unix like OSes.
-* EASYSERVER_SERVE_STATIC - whether to serve static and media files. Defaults to True.
+* EASYSERVER which is a dict of the following:
+    * IP - the IP address to bind. Defaults to 0.0.0.0  (all available IPs)
+    * PORT - port to bind. Defaults to 80. You will need to change this or configure the system for appropriate privileges on unix like OSes.
+    * SERVE_STATIC - whether to serve static and media files. Defaults to True.
 * CHEROOT - a dict of any keyword params accepted by Cheroot's [cheroot.wsgi.Server](https://cheroot.cherrypy.dev/en/latest/pkg/cheroot.wsgi/). Defaults to {} but this is NOT the same as cheroot for all defaults.
 
 
@@ -59,11 +60,11 @@ Obviously all these will vary with your use case. If it works well then it has t
 
 Performance is likely to be the main objection to the use of Django Easyserver. While it does not follow the conventional wisdom (that multi-process is preferable to threading) with regard to Python performance and scaling, there are good arguments in its favour.
 
-The server used is Cheroot, the server from the (threaded) CherryPy framework. In most, if not all,  publicly available benchmarking CherryPy performs well. It is possible that threaded Django on Cheroot will perform worse than CherryPy on Cheroot, but there is no known reason to expect that.
+The server used is Cheroot, the server from the (threaded) CherryPy framework. In most, if not all, publicly published benchmarks, CherryPy performs well. It is possible that threaded Django on Cheroot will perform worse than CherryPy on Cheroot, but there is no known reason to expect that.
 
 On a single (virtual) core VPS threading should perform better. It cannot have worse parallelism and it has slightly lower overhead.
 
-On a large multicore server multiple processes should perform better.
+On a large multi-core server multiple processes should perform better.
 
 At what point this happens will be application and configuration dependent. For example, many C libraries release the Python GIL and are thread safe so if these dominate CPU time multiple threads will make good use of multiple cores. On the other hand if you are doing a lot of heavy processing in pure Python and have sufficiently high traffic that you need this to be well parallelised (unless you have thousands of requests per hour you probably do not) then you need multiple processes.
 

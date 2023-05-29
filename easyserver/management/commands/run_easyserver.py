@@ -10,7 +10,22 @@ from django.core.wsgi import get_wsgi_application
 from django.conf import settings
 
 
-# override default cheroot settings
+# Get relevant settings
+
+
+easyserver_settings = {
+    **{
+        'SERVE_STATIC': True,
+        'IP': '0.0.0.0',
+        'PORT': 80,
+        # TODO add setting for 
+    },
+    **getattr(settings, 'EASYSERVER', {}),
+}
+
+print(easyserver_settings)
+
+# cheroot settings have some overrides of original cheroot defaults
 cheroot_defaults = {
     #  TODO replace based on number of CPUs
     'minthreads': 3,  # a good default for a small VPS
@@ -53,7 +68,7 @@ def get_static_app(root):
 
 
 def get_dispatcher():
-    serve_static = getattr(settings, 'EASYSERVER_SERVE_STATIC', True)
+    serve_static = easyserver_settings['SERVE_STATIC']
     if not serve_static:
         return get_wsgi_application()
     # paths can only be top level dir
@@ -87,10 +102,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         server = Server(
-            (
-                getattr(settings, 'EASYSERVER_IP', None) or '0.0.0.0',
-                getattr(settings, 'EASYSERVER_PORT', None) or 80
-            ),
+            (easyserver_settings['IP'], easyserver_settings['PORT']),
             get_dispatcher()
         )
         print('starting:', server)
