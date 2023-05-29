@@ -53,6 +53,9 @@ def get_static_app(root):
 
 
 def get_dispatcher():
+    serve_static = getattr(settings, 'EASYSERVER_SERVE_STATIC', True)
+    if not serve_static:
+        return get_wsgi_application()
     # paths can only be top level dir
     # replace assertions with checks. Ensure directory exists
     static_path = settings.STATIC_URL.strip('/').split('/')

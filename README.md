@@ -12,6 +12,7 @@ The following settings are all optional:
 
 * EASYSERVER_IP - the IP address to bind. Defaults to 0.0.0.0  (all available IPs)
 * EASYSERVER_PORT - port to bind. Defaults to 80. You will need to change this or configure the system for appropriate privileges on unix like OSes.
+* EASYSERVER_SERVE_STATIC - whether to serve static and media files. Defaults to True.
 * CHEROOT - a dict of any keyword params accepted by Cheroot's [cheroot.wsgi.Server](https://cheroot.cherrypy.dev/en/latest/pkg/cheroot.wsgi/). Defaults to {} but this is NOT the same as cheroot for all defaults.
 
 
